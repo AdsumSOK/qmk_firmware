@@ -187,7 +187,7 @@ layer_state_t default_user(layer_state_t state) {
 #endif // RGBLIGHT_ENABLE
 
 //SSD1306 OLED update loop, make sure to enable OLED_ENABLE=yes in rules.mk
-#ifdef OLED_ENABLEo
+#ifdef OLED_ENABLE
 
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
     if (is_keyboard_master()) {
@@ -300,7 +300,7 @@ void render_default_layer_state(void) {
         default:
             oled_write_ln_P(PSTR("Undefined"), false);
     }
-    //change_keyboard_color_for_layer();
+
 }
 
 void render_keylock_status(led_t led_state) {
@@ -345,6 +345,7 @@ bool oled_task_user(void) {
   }
     return false;
 }
+#endif // OLED_ENABLE
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     static bool delkey_registered=false;
@@ -380,7 +381,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
     return true;
 }
-#endif // OLED_ENABLE
+
 
 
 // Rotary encoder related code
