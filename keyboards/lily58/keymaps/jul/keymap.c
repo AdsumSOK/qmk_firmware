@@ -167,8 +167,8 @@ const rgblight_segment_t PROGMEM my_raise_layer[] = RGBLIGHT_LAYER_SEGMENTS(
 const rgblight_segment_t PROGMEM my_game_layer[] = RGBLIGHT_LAYER_SEGMENTS(
     {0,70, HSV_GREEN},// Light 70 LEDs, starting with LED 0
     {30,1, COLORSURB2},
-    {50,1, COLORSURB},
-    {54,3, COLORSURB}
+    {55,1, COLORSURB},
+    {61,3, COLORSURB}
 );
 
 const rgblight_segment_t* const PROGMEM my_rgb_layers[] = RGBLIGHT_LAYERS_LIST(
