@@ -36,9 +36,10 @@ enum layers {
 #ifdef RGBLIGHT_ENABLE
 #define COLORSURB 0, 255, 255   // RED
 #define COLORSURB2 51, 87, 100  // WHITE
-#define ORANGE_JUL 20, 255,50
+#define ORANGE_JUL 17, 255,50
 
 void set_rgb_anilatuion_by_layer(layer_state_t state){
+    /*
     switch (get_highest_layer(layer_state)) {
     case _QWERTY:
         rgblight_mode_noeeprom(RGBLIGHT_MODE_BREATHING);
@@ -54,7 +55,7 @@ void set_rgb_anilatuion_by_layer(layer_state_t state){
         break;
     default:
         rgblight_mode_noeeprom(RGBLIGHT_MODE_RGB_TEST);
-    }
+    }*/
 }
 #endif
 
@@ -65,13 +66,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_ESC,   KC_1,   KC_2,    KC_3,    KC_4,    KC_5,                        KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS,
   KC_TAB,   KC_Q,   KC_W,    KC_E,    KC_R,    KC_T,                        KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_EQL,
   KC_LSFT,  KC_A,   KC_S,    KC_D,    KC_F,    KC_G,                        KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
-  KC_LCTRL, KC_Z,   KC_X,    KC_C,    KC_V,    KC_B,    KC_LBRC,  KC_RBRC,  KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,  KC_DEL,
+  KC_FL, KC_Z,   KC_X,    KC_C,    KC_V,    KC_B,    KC_LBRC,  KC_RBRC,  KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,  KC_DEL,
                              MO(1),   KC_LGUI, KC_LALT, KC_SPC,   KC_ENT,   KC_RALT, KC_NUBS, TT(2)
 ),
 [_LOWER] = LAYOUT(
-  KC_VOLU, _______, _______, _______, _______, _______,                   _______, _______, _______,_______, _______, _______,
-  KC_VOLD, _______, _______, _______, _______, _______,                   _______, _______, _______,_______, _______, _______,
-  _______, _______, _______, _______, _______, _______,                   _______, _______, _______,_______, _______, _______,
+  KC_VOLU, _______, _______, _______, _______, _______,                   _______, _______, _______,RGB_M_P, RGB_M_B, RGB_M_R,
+  KC_VOLD, _______, _______, _______, _______, _______,                   _______, _______, _______,RGB_M_SW, RGB_M_SN, RGB_M_K,
+  _______, _______, _______, _______, _______, _______,                   _______, _______, _______,RGB_M_X, RGB_M_G, RGB_M_T,
   KC_MUTE, _______, _______, _______, _______, _______, KC_MPRV, KC_MNXT,  _______, _______, _______,_______, _______, _______,
                              _______, _______, _______, KC_MPLY, KC_MSTP,  _______, _______, _______
 ),
@@ -82,20 +83,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_TRNS,  KC_PSCR, KC_LEFT, KC_DOWN, KC_RGHT, KC_TRNS, KC_CAPS, KC_NLCK,  KC_P1,   KC_P2,   KC_P3,   KC_PEQL, KC_TRNS, KC_TRNS,
                                TT(0), KC_TRNS, KC_TRNS,  KC_TRNS, KC_TRNS,  KC_P0,   KC_PDOT, _______
 ),
-/* GAME
- * ,-----------------------------------------.                    ,-----------------------------------------.
- * |      |      |      |      |      |      |                    |      |      |      |      |      |      |
- * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      |      |      |      |      |      |                    |      |      |      |      |      |      |
- * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      |      |      |      |      |      |-------.    ,-------|      |      |RGB ON| HUE+ | SAT+ | VAL+ |
- * |------+------+------+------+------+------|       |    |       |------+------+------+------+------+------|
- * |      |      |      |      |      |      |-------|    |-------|      |      | MODE | HUE- | SAT- | VAL- |
- * `-----------------------------------------/       /     \      \-----------------------------------------'
- *                   | LAlt | LGUI |LOWER | /Space  /       \Enter \  |RAISE |BackSP| RGUI |
- *                   |      |      |      |/       /         \      \ |      |      |      |
- *                   `----------------------------'           '------''--------------------'
- */
   [_GAME] = LAYOUT(
   KC_TRNS,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,                    KC_ESC,   KC_6,   KC_7,    KC_8,    KC_9,    KC_0,
   KC_TRNS,  KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,                   KC_GRV,   KC_1,   KC_2,    KC_3,    KC_4,    KC_5,
@@ -159,7 +146,7 @@ const rgblight_segment_t* const PROGMEM my_rgb_layers[] = RGBLIGHT_LAYERS_LIST(
 
 layer_state_t default_user(layer_state_t state) {
     rgblight_set_layer_state(0, layer_state_cmp(state, _QWERTY));
-    rgblight_mode_noeeprom(RGBLIGHT_MODE_BREATHING);
+    //rgblight_mode_noeeprom(RGBLIGHT_MODE_BREATHING);
     return state;
 }
 
@@ -328,6 +315,7 @@ bool oled_task_user(void) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     static bool delkey_registered=false;
+    static bool ctrlkey_registered=false;
     mod_state = get_mods();
     if (record->event.pressed) {
         add_keylog(keycode);
@@ -346,6 +334,21 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     return false;
                 }
                 break;
+            case KC_LCTRL:
+                if (mod_state & MOD_MASK_SHIFT) {
+                    // First temporarily canceling both shifts so that
+                    // shift isn't applied to the KC_DEL keycode
+                    del_mods(MOD_MASK_SHIFT);
+                    register_code(KC_RCTRL);
+                    // Update the boolean variable to reflect the status of KC_DEL
+                    ctrlkey_registered = true;
+                    // Reapplying modifier state so that the held shift key(s)
+                    // still work even after having tapped the Backspace/Delete key.
+                    set_mods(mod_state);
+                    return false;
+                }
+                break;
+
         }
     }else{
         switch(keycode){
@@ -355,6 +358,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                         delkey_registered = false;
                         return false;
                 }
+            break;
+            case KC_LCTRL:
+                if (ctrlkey_registered) {
+                        unregister_code(KC_RCTRL);
+                        ctrlkey_registered = false;
+                        return false;
+                }
+            break;
         }
     }
 
@@ -407,7 +418,7 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 #ifdef RGBLIGHT_ENABLE
 void keyboard_post_init_user(void) {
    rgblight_layers = my_rgb_layers;
-    rgblight_sethsv_noeeprom(ORANGE_JUL);
-    rgblight_mode_noeeprom(RGBLIGHT_MODE_BREATHING);
+   rgblight_sethsv_noeeprom(ORANGE_JUL);
+   rgblight_mode_noeeprom(RGBLIGHT_MODE_BREATHING);
 }
 #endif
