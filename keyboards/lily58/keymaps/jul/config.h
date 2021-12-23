@@ -36,7 +36,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define RGBLIGHT_LAYERS
 #define RGBLIGHT_SPLIT
-
+#define TAPPING_TERM 85
 // If you are using an Elite C rev3 on the slave side, uncomment the lines below:
-#define SPLIT_USB_DETECT
+//#define SPLIT_USB_DETECT
 //#define NO_USB_STARTUP_CHECK
