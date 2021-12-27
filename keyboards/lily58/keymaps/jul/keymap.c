@@ -70,7 +70,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                              MO(1),   KC_LGUI, KC_LALT, KC_SPC,   KC_ENT,   KC_RALT, KC_NUBS, TT(2)
 ),
 [_LOWER] = LAYOUT(
-  KC_VOLU, _______, _______, _______, _______, _______,                   _______, _______, _______,RGB_M_P, RGB_M_B, RGB_M_R,
+  KC_VOLU, _______, _______, _______, _______, _______,                   _______, _______, _______,RGB_M_B, RGB_M_TW, RGB_M_R,
   KC_VOLD, _______, _______, _______, _______, _______,                   _______, _______, _______,RGB_M_SW, RGB_M_SN, RGB_M_K,
   _______, _______, _______, _______, _______, _______,                   _______, _______, _______,RGB_M_X, RGB_M_G, RGB_M_T,
   KC_MUTE, _______, _______, _______, _______, _______, KC_MPRV, KC_MNXT,  _______, _______, _______,_______, _______, _______,
@@ -321,10 +321,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         add_keylog(keycode);
         switch(keycode){
             case KC_DEL:
-                if (mod_state & MOD_MASK_SHIFT) {
+                if (mod_state & MOD_MASK_CTRL) {
                     // First temporarily canceling both shifts so that
                     // shift isn't applied to the KC_DEL keycode
-                    del_mods(MOD_MASK_SHIFT);
+                    del_mods(MOD_MASK_CTRL);
                     register_code(KC_BSPC);
                     // Update the boolean variable to reflect the status of KC_DEL
                     delkey_registered = true;
