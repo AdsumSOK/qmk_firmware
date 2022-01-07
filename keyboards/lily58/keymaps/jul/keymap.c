@@ -38,24 +38,25 @@ enum layers {
 #define COLORSURB2 51, 87, 100  // WHITE
 #define ORANGE_JUL 17, 255,50
 
-void set_rgb_anilatuion_by_layer(layer_state_t state){
-    /*
+void set_rgb_animation_by_layer(layer_state_t state){
+/*
     switch (get_highest_layer(layer_state)) {
     case _QWERTY:
-        rgblight_mode_noeeprom(RGBLIGHT_MODE_BREATHING);
+        rgblight_mode_noeeprom(RGBLIGHT_MODE_CHRISTMAS);
         break;
     case _LOWER:
-        rgblight_mode_noeeprom(RGBLIGHT_MODE_BREATHING);
+        rgblight_mode_noeeprom(RGBLIGHT_MODE_CHRISTMAS);
         break;
     case _RAISE:
-        rgblight_mode_noeeprom(RGBLIGHT_MODE_BREATHING);
+        rgblight_mode_noeeprom(RGBLIGHT_MODE_CHRISTMAS);
         break;
     case _GAME:
-        rgblight_mode_noeeprom(RGBLIGHT_MODE_BREATHING);
+        rgblight_mode_noeeprom(RGBLIGHT_MODE_CHRISTMAS);
         break;
     default:
         rgblight_mode_noeeprom(RGBLIGHT_MODE_RGB_TEST);
-    }*/
+    }
+*/
 }
 #endif
 
@@ -95,9 +96,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 layer_state_t layer_state_set_user(layer_state_t state) {
     //state = update_tri_layer_state(state, _RAISE, _LOWER, _GAME);
 #ifdef RGBLIGHT_ENABLE// RGBLIGHT_ENABLE
+
     rgblight_set_layer_state(1, layer_state_cmp(state, _LOWER));
     rgblight_set_layer_state(2, layer_state_cmp(state, _RAISE));
     rgblight_set_layer_state(3, layer_state_cmp(state, _GAME));
+
 #endif // RGBLIGHT_ENABLE
     return state;
 
@@ -322,31 +325,35 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         switch(keycode){
             case KC_DEL:
                 if (mod_state & MOD_MASK_CTRL) {
-                    // First temporarily canceling both shifts so that
-                    // shift isn't applied to the KC_DEL keycode
-                    del_mods(MOD_MASK_CTRL);
-                    register_code(KC_BSPC);
-                    // Update the boolean variable to reflect the status of KC_DEL
-                    delkey_registered = true;
-                    // Reapplying modifier state so that the held shift key(s)
-                    // still work even after having tapped the Backspace/Delete key.
-                    set_mods(mod_state);
-                    return false;
+                    if (!(mod_state & MOD_MASK_ALT)){
+                        // First temporarily canceling both shifts so that
+                        // shift isn't applied to the KC_DEL keycode
+                        del_mods(MOD_MASK_CTRL);
+                        register_code(KC_BSPC);
+                        // Update the boolean variable to reflect the status of KC_DEL
+                        delkey_registered = true;
+                        // Reapplying modifier state so that the held shift key(s)
+                        // still work even after having tapped the Backspace/Delete key.
+                        set_mods(mod_state);
+                        return false;
+                    }
                 }
                 break;
 
             case KC_LCTRL:
                 if (mod_state & MOD_MASK_SHIFT) {
-                    // First temporarily canceling both shifts so that
-                    // shift isn't applied to the KC_DEL keycode
-                    del_mods(MOD_MASK_SHIFT);
-                    register_code(KC_RCTRL);
-                    // Update the boolean variable to reflect the status of KC_DEL
-                    ctrlkey_registered = true;
-                    // Reapplying modifier state so that the held shift key(s)
-                    // still work even after having tapped the Backspace/Delete key.
-                    set_mods(mod_state);
-                    return false;
+                    if (!(mod_state & MOD_MASK_ALT)){
+                        // First temporarily canceling both shifts so that
+                        // shift isn't applied to the KC_DEL keycode
+                        del_mods(MOD_MASK_SHIFT);
+                        register_code(KC_RCTRL);
+                        // Update the boolean variable to reflect the status of KC_DEL
+                        ctrlkey_registered = true;
+                        // Reapplying modifier state so that the held shift key(s)
+                        // still work even after having tapped the Backspace/Delete key.
+                        set_mods(mod_state);
+                        return false;
+                    }
                 }
                 break;
 
